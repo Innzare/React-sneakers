@@ -1,0 +1,33 @@
+@import './styles/template';
+
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   font-family: 'Inter', system-ui, serif;
+}
+
+ul {
+   list-style: none;
+}
+
+a {
+   text-decoration: none;
+}
+
+body {
+   background-color: #e7f6ff;
+   padding: 50px;
+   font-family: "Inter", serif;
+   &.no-scroll {
+      height: 100%;
+      // overflow: hidden;
+      overflow: auto;
+   }
+   @include tablets {
+      padding: 25px;
+   }
+   @include phones {
+      padding: 0px;
+   }
+}

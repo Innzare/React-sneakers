@@ -1,0 +1,29 @@
+@import './../../styles/template';
+
+.content {
+   padding: 40px;
+   @include phones {
+      padding: 20px;
+      padding-top: 110px;
+   }
+   .sneakers-product {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 40px;
+      @include tablets {
+         justify-content: space-between;
+         gap: 0;
+      }
+   }
+   &__title {
+      @include tablets {
+         flex-direction: column;
+         align-items: start;
+         h1 {
+            margin-bottom: 20px;
+         }
+      }
+   }
+}

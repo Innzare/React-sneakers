@@ -1,0 +1,133 @@
+// Миксины ===========================================================================
+@mixin flexbox() {
+   display: -webkit-box;
+   display: -moz-box;
+   display: -ms-flexbox;
+   display: -webkit-flex;
+   display: flex;
+}
+
+//Медиа-запросы
+//Миксин, который сохранит вам очень много времени! Вы можете использовать значения только в пикселях, но у нас есть также настройки контрольных точек по умолчанию, которые также ////работают, другие же – экономят время, сохраняя свои контрольные точки последовательно.
+
+$breakpoints: (
+   "phone": 400px,
+   "phone-wide": 480px,
+   "phablet": 560px,
+   "tablet-small": 640px,
+   "tablet": 768px,
+   "tablet-wide": 1024px,
+   "desktop": 1248px,
+   "desktop-wide": 1440px,
+);
+
+@mixin mq($width, $type: min) {
+   @if map_has_key($breakpoints, $width) {
+      $width: map_get($breakpoints, $width);
+      @if $type == max {
+         $width: $width - 1px;
+      }
+      @media only screen and (#{$type}-width: $width) {
+         @content;
+      }
+   }
+}
+//Пример ниже показывает увеличение внутренних отступов и размера шрифта, когда вьюпорт становится больше 1024px.
+
+// .site-header {
+//   padding: 2rem;
+//   font-size: 1.8rem;
+//   @include mq('tablet-wide') {
+//    padding-top: 4rem;
+//    font-size: 2.4rem;
+//   }
+// }
+
+//Стили шрифта =======================================================================
+//Переложите все проблемы установки шрифтов на этот миксин. (Предполагается, что вы уже установили шрифт), укажите резервные шрифты один раз и больше не беспокойтесь об этом.
+
+@mixin font-source-sans($size: false, $colour: false, $weight: false, $lh: false) {
+   font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+   @if $size {
+      font-size: $size;
+   }
+   @if $colour {
+      color: $colour;
+   }
+   @if $weight {
+      font-weight: $weight;
+   }
+   @if $lh {
+      line-height: $lh;
+   }
+}
+
+// Шрифт по умолчанию=================================================================
+$fontfamily: "Montserrat";
+.wrapper {
+   font-family: $fontfamily;
+}
+
+// Переменные=========================================================================
+$mw: 1024px;
+$md1: 768px;
+$md2: 425px;
+// $md3: ;
+// $md4: ;
+
+// mixins популярных брекпоинтов =====================================================
+@mixin desktop {
+   @media screen and (max-width: 1024px) {
+      @content;
+   }
+}
+@mixin laptop {
+   @media screen and (max-width: 1024px) {
+      @content;
+   }
+}
+@mixin tablets {
+   @media screen and (max-width: 768px) {
+      @content;
+   }
+}
+@mixin phones {
+   @media screen and (max-width: 425px) {
+      @content;
+   }
+}
+
+// Адаптивное свойство
+$maxWidth: 1920;
+$maxWidthContainer: 1170;
+
+@mixin adaptiv-value ($property, $startSize, $minSize, $type) {
+   $addSize: $startSize - $minSize;
+   @if $type==1 {
+      // Только если меньше контейнера
+      #{$property}: $startSize + px;
+      @media (max-width: #{$maxWidthContainer + px} ) {
+         #{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - 320px) / #{$maxWidthContainer - 320}) );
+      }
+   } @else if $type==2 {
+      // Только если больше контейнера
+      #{$property}: $startSize + px;
+      @media (min-width: #{$maxWidthContainer + px}) {
+         #{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - 320px) / #{$maxWidth - 320}) );
+      }
+   } @else {
+      // Всегда
+      #{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - 320px) / #{$maxWidth - 320}) );
+   }
+}
+
+// Общий ограничивающий контейнер=====================================================
+.container {
+   max-width: 1450px;
+   width: 98%;
+   margin: 0 auto;
+   @include desktop {
+   }
+   @include tablets {
+   }
+}

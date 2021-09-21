@@ -1,0 +1,43 @@
+@import './../../styles/template';
+
+.input-wrapper {
+   position: relative;
+   @include tablets {
+      width: 100%;
+   }
+   svg {
+      position: absolute;
+      top: 50%;
+      left: 14px;
+      transform: translateY(-54%);
+   }
+   input {
+      width: 250px;
+      height: 45px;
+      padding: 18px;
+      padding-left: 40px;
+      padding-right: 25px;
+      border: 1px solid #F3F3F3;
+      box-sizing: border-box;
+      border-radius: 10px;
+      transition: border-color .3s;
+      color: rgba(0, 0, 0, 0.575);
+      &::placeholder {
+         font-size: 14px;
+         color: #C4C4C4;
+      }
+      &:focus {
+         border-color: #b6ddf5;
+      }
+      @include tablets {
+         width: 100%;
+      }
+   }
+   .clear-input {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+   }
+}

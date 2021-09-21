@@ -1,0 +1,104 @@
+@import './../../styles/template';
+
+.product-item {
+   flex: 0 1 17%;
+   position: relative;
+   background: #FFFFFF;
+   border: 1px solid #F3F3F3;
+   box-sizing: border-box;
+   border-radius: 40px;
+   padding: 20px 30px 30px;
+   display: inline-flex;
+   flex-direction: column;
+   align-items: center;
+   cursor: pointer;
+   transition: .3s ease-in-out;
+   @include tablets {
+      flex: 0 1 45%;
+      margin-bottom: 30px;
+   }
+   @media (max-width: 540px) {
+      flex: 0 1 100%;
+   }
+   &:hover {
+      box-shadow: 0px 14px 30px rgba(0, 0, 0, 0.05);
+      transform: translateY(-5px);
+   }
+   .like {
+      position: absolute;
+      display: flex;
+      background-color: #fff;
+      padding: 9px;
+      top: 30px;
+      left: 30px;
+      border: 1px solid #f2f2f2;
+      border-radius: 8px;
+      transition: .3s;
+      cursor: pointer;
+      svg {
+         width: 14px;
+         height: 12px;
+         path {
+            fill: #D3D3D3;
+         }
+      }
+      &.active {
+         background-color: #FEF0F0;
+         &:hover {
+            border: 1px solid #FEF0F0;
+         }
+         svg {
+            path {
+               fill: #FF8585;
+               background-color: #FF8585;
+            }
+            
+         }
+      }
+      &:hover {
+         border-color: #d1d1d1;
+      }
+   }
+   .img {
+      img {
+         width: 133px;
+      }
+   }
+   p {
+      margin: 15px 0;
+      font-size: 14px;
+      color: #000000;
+      max-width: 150px;
+   }
+   .price-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      span {
+         font-weight: 500;
+         font-size: 11px;
+         text-transform: uppercase;
+         color: #BDBDBD;
+      }
+      b {
+         font-size: 14px;
+      }
+      button {
+         background: #fff;
+         width: 32px;
+         height: 32px;
+         border: 1px solid #f2f2f2;
+         border-radius: 8px;
+         cursor: pointer;
+         transition: .3s;
+         &:hover {
+            border-color: #d1d1d1;
+         }
+         &.active {
+            // background: linear-gradient(180deg, #89F09C 0%, #3CC755 100%);
+            background: #79E88D;
+         }
+      }
+   }
+}
