@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import './header.scss';
 
-const Header = ({ drawer, cartCount }) => {
+const Header = ({ drawer, cartCount, favouritesCount }) => {
    return (
       <header className="header d-flex justify-between align-center">
          <Link to="/">
@@ -26,6 +26,9 @@ const Header = ({ drawer, cartCount }) => {
                   <img src="/img/header/cart.svg" alt="Cart" />
                </li>
                <li>
+                  {
+                     favouritesCount !== 0 && <div className="favourite-count">{favouritesCount}</div>
+                  }
                   <Link to="/favourites">
                      <img src="/img/header/like.svg" alt="Favourites" />
                   </Link>
