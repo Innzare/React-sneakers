@@ -5,11 +5,27 @@ import Search from '../search';
 
 import './content.scss';
 
-const Content = ({ onClickAdd, sneakers, onClickFavourite }) => {
+const Content = ({ onClickAdd, sneakers, onClickFavourite, isLoading }) => {
    const [searchValue, setSearchValue] = React.useState('');
 
    const onSearchValue = (value) => {
       setSearchValue(value);
+   }
+
+   const renderContent = () => {
+      const filteredContent = sneakers.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase()));
+
+      return (isLoading ? [...Array(10)] : filteredContent).map((item, index) => {
+         return (
+            <ProductItem
+               onClickAdd={onClickAdd}
+               onClickFavourite={onClickFavourite}
+               productData={item}
+               key={isLoading ? index : item.id}
+               isLoading={isLoading}
+            ></ProductItem>
+         )
+      });
    }
 
    return (
@@ -20,18 +36,8 @@ const Content = ({ onClickAdd, sneakers, onClickFavourite }) => {
          </div>
          <div className="sneakers-product">
             {
-               sneakers.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase())).map(item => {
-                  return (
-                     <ProductItem
-                        onClickAdd={onClickAdd}
-                        onClickFavourite={onClickFavourite}
-                        productData={item}
-                        key={item.id}
-                     ></ProductItem>
-                  )
-               })
+               renderContent()
             }
-
          </div>
       </div>
    );

@@ -1,7 +1,7 @@
 [{
    "id": "1",
    "catalogId": "1",
-   "title": "Мужские Кроссовки Nike Blazer Mid Suede",
+   "title": "Nike Blazer Mid Suede",
    "imgUrl": "/img/sneakers/1.jpg",
    "price": "12 999 руб.",
    "added": false,
@@ -10,7 +10,7 @@
   {
    "id": "2",
    "catalogId": "2",
-   "title": "Мужские Кроссовки Nike Air Max 270",
+   "title": "Nike Air Max 270",
    "imgUrl": "/img/sneakers/2.jpg",
    "price": "12 999 руб.",
    "added": false,
@@ -19,7 +19,7 @@
   {
    "id": "3",
    "catalogId": "3",
-   "title": "Мужские Кроссовки Nike Blazer Mid Suede",
+   "title": "Nike Blazer Mid Suede",
    "imgUrl": "/img/sneakers/3.jpg",
    "price": "8 499 руб.",
    "added": false,
@@ -28,7 +28,7 @@
   {
    "id": "4",
    "catalogId": "4",
-   "title": "Кроссовки Puma X Aka Boku Future Rider",
+   "title": "Puma X Aka Boku Future Rider",
    "imgUrl": "/img/sneakers/4.jpg",
    "price": "8 999 руб.",
    "added": false,
@@ -37,9 +37,55 @@
   {
    "id": "5",
    "catalogId": "5",
-   "title": "Мужские Кроссовки Under Armour Curry 8",
+   "title": "Under Armour Curry 8",
    "imgUrl": "/img/sneakers/5.jpg",
    "price": "15 199 руб.",
    "added": false,
    "favourite": false
-  }]
+  },
+  {
+   "id": "6",
+   "catalogId": "6",
+   "title": "Nike Blazer Mid Suede",
+   "imgUrl": "/img/sneakers/6.jpg",
+   "price": "12 999 руб.",
+   "added": false,
+   "favourite": false
+  },
+  {
+   "id": "7",
+   "catalogId": "7",
+   "title": "Nike Air Max 270",
+   "imgUrl": "/img/sneakers/7.jpg",
+   "price": "12 999 руб.",
+   "added": false,
+   "favourite": false
+  },
+  {
+   "id": "8",
+   "catalogId": "8",
+   "title": "Nike Blazer Mid Suede",
+   "imgUrl": "/img/sneakers/8.jpg",
+   "price": "8 499 руб.",
+   "added": false,
+   "favourite": false
+  },
+  {
+   "id": "9",
+   "catalogId": "9",
+   "title": "Puma X Aka Boku Future Rider",
+   "imgUrl": "/img/sneakers/9.jpg",
+   "price": "8 999 руб.",
+   "added": false,
+   "favourite": false
+  },
+  {
+   "id": "10",
+   "catalogId": "10",
+   "title": "Under Armour Curry 8",
+   "imgUrl": "/img/sneakers/10.jpg",
+   "price": "15 199 руб.",
+   "added": false,
+   "favourite": false
+  }
+]
