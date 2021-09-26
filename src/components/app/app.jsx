@@ -63,36 +63,46 @@ const App = () => {
    }
 
    const onClickAdd = async (data) => {
-      setSneakers(prev => {
-         const newArr = prev.slice();
-         return newArr.map(item => item.id === data.id ? { ...item, added: !item.added } : { ...item });
-      })
+      // setSneakers(prev => {
+      //    const newArr = prev.slice();
+      //    return newArr.map(item => item.id === data.id ? { ...item, added: !item.added } : { ...item });
+      // })
 
       if (data.added) {
          axios.delete(`https://6147484265467e0017384ad7.mockapi.io/cart/${data.cartIdForDel}`)
          axios.put(`https://6147484265467e0017384ad7.mockapi.io/products/${data.catalogId}`, {
             ...data, added: false
          })
+         axios.put(`https://6147484265467e0017384ad7.mockapi.io/favourites/${data.favouriteIdForDel}`, {
+            ...data, added: false,
+         })
          setCartItems((prevCartItems) => {
             return prevCartItems.filter(item => item.id !== data.cartIdForDel)
          })
+         setSneakers(prev => {
+            const newArr = prev.slice();
+            return newArr.map(item => item.catalogId === data.catalogId ? { ...item, added: false } : { ...item });
+         })
          setFavourites((prev) => {
             const newArr = prev.slice();
-            return newArr.map(item => item.favouriteIdForDel === data.favouriteIdForDel ? { ...item, added: false } : { ...item });
+            return newArr.map(item => item.favouriteIdForDel === data.favouriteIdForDel ? { ...item, added: false, } : { ...item });
          })
       } else {
          const cartResp = await axios.post('https://6147484265467e0017384ad7.mockapi.io/cart', data);
          axios.put(`https://6147484265467e0017384ad7.mockapi.io/products/${data.catalogId}`, {
             ...data, added: true, cartIdForDel: cartResp.data.id
          })
+         axios.put(`https://6147484265467e0017384ad7.mockapi.io/favourites/${data.favouriteIdForDel}`, {
+            ...data, added: true, cartIdForDel: cartResp.data.id
+         })
          setCartItems(prev => [...prev, cartResp.data])
          setSneakers(prev => {
             const newArr = prev.slice();
-            return newArr.map(item => item.id === data.id ? { ...item, cartIdForDel: cartResp.data.id } : { ...item });
+            return newArr.map(item => item.catalogId === data.catalogId ? { ...item, added: true, cartIdForDel: cartResp.data.id } : { ...item });
          })
          setFavourites((prev) => {
             const newArr = prev.slice();
-            return newArr.map(item => item.favouriteIdForDel === data.favouriteIdForDel ? { ...item, added: true } : { ...item });
+            return newArr.map(item => item.favouriteIdForDel === data.favouriteIdForDel ? { ...item, added: true, cartIdForDel: cartResp.data.id } : { ...item });
          })
       }
 
@@ -101,9 +111,16 @@ const App = () => {
    const removeCartItem = (data) => {
       axios.delete(`https://6147484265467e0017384ad7.mockapi.io/cart/${data.id}`);
       axios.put(`https://6147484265467e0017384ad7.mockapi.io/products/${data.catalogId}`, { ...data, added: false })
+      axios.put(`https://6147484265467e0017384ad7.mockapi.io/favourites/${data.favouriteIdForDel}`, {
+         ...data, added: false
+      })
       setSneakers(prev => {
          const newArr = prev.slice();
          return newArr.map(item => item.id === data.catalogId ? { ...item, added: false } : { ...item });
+      })
+      setFavourites((prev) => {
+         const newArr = prev.slice();
+         return newArr.map(item => item.favouriteIdForDel === data.favouriteIdForDel ? { ...item, added: false, } : { ...item });
       })
       setCartItems((prevCartItems) => {
          return prevCartItems.filter(item => item.id !== data.id)

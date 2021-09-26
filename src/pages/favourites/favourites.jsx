@@ -24,7 +24,7 @@ const Favourites = ({ items, onClickAdd, onClickFavourite }) => {
                items.map(item => {
                   return (
                      <ProductItem
-                        productData={item}
+                        productData={{ ...item, addFromFavourite: true }}
                         onClickAdd={onClickAdd}
                         onClickFavourite={onClickFavourite}
                         key={item.id}
