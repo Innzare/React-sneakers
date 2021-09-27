@@ -15,7 +15,7 @@ const Content = ({ onClickAdd, sneakers, onClickFavourite, isLoading }) => {
    const renderContent = () => {
       const filteredContent = sneakers.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase()));
 
-      return (isLoading ? [...Array(10)] : filteredContent).map((item, index) => {
+      return (isLoading ? [...Array(4)] : filteredContent).map((item, index) => {
          return (
             <ProductItem
                onClickAdd={onClickAdd}
