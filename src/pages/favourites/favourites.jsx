@@ -3,9 +3,13 @@ import { Link } from 'react-router-dom';
 
 import ProductItem from './../../components/product-item';
 
+import AppContext from '../../context';
+
 import './favourites.scss';
 
 const Favourites = ({ items, onClickAdd, onClickFavourite }) => {
+
+   const state = React.useContext(AppContext);
 
    return (
       <div className="favourites">
@@ -21,7 +25,7 @@ const Favourites = ({ items, onClickAdd, onClickFavourite }) => {
          </div>
          <div className="content">
             {
-               items.map(item => {
+               state.favourites.map(item => {
                   return (
                      <ProductItem
                         productData={{ ...item, addFromFavourite: true }}

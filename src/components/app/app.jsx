@@ -1,7 +1,9 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import axios from 'axios'
+import axios from 'axios';
+
+import AppContext from '../../context';
 
 import Header from '../header';
 import Content from '../content';
@@ -10,6 +12,8 @@ import Favourites from './../../pages/favourites';
 import User from './../../pages/user';
 
 import './app.scss';
+
+// export const AppContext = React.createContext({});
 
 const App = () => {
    const [drawer, setDrawer] = React.useState(false);
@@ -106,7 +110,7 @@ const App = () => {
                return newArr.map(item => item.catalogId === data.catalogId ? { ...item, added: false } : { ...item });
             })
 
-            if (favourites.length > 0) {
+            if (favourites.length > 0 && favourites.some(item => item.catalogId === data.catalogId)) {
                axios.put(`https://6147484265467e0017384ad7.mockapi.io/favourites/${data.favouriteIdForDel}`, {
                   ...data, added: false,
                })
@@ -134,7 +138,7 @@ const App = () => {
                return newArr.map(item => item.catalogId === data.catalogId ? { ...item, added: true, cartIdForDel: cartResp.data.id } : { ...item });
             })
 
-            if (favourites.length > 0) {
+            if (favourites.length > 0 && favourites.some(item => item.catalogId === data.catalogId)) {
                axios.put(`https://6147484265467e0017384ad7.mockapi.io/favourites/${data.favouriteIdForDel}`, {
                   ...data, added: true, cartIdForDel: cartResp.data.id
                })
@@ -161,7 +165,7 @@ const App = () => {
             return newArr.map(item => item.id === data.catalogId ? { ...item, added: false } : { ...item });
          })
 
-         if (favourites.length > 0) {
+         if (favourites.length > 0 && favourites.some(item => item.catalogId === data.catalogId)) {
             axios.put(`https://6147484265467e0017384ad7.mockapi.io/favourites/${data.favouriteIdForDel}`, {
                ...data, added: false
             })
@@ -181,44 +185,47 @@ const App = () => {
    }
 
    return (
-      <div className="app clear">
+      <AppContext.Provider value={{ cartItems, favourites, sneakers }}>
+         <div className="app clear">
 
-         <Header
-            drawer={cartOpen}
-            cartCount={cartItems.length}
-            favouritesCount={favourites.length}
-         />
-
-         <Drawer
-            active={drawer}
-            cartItems={cartItems}
-            removeCartItem={removeCartItem}
-            closeDrawer={cartOpen}
-         />
-
-
-         <Route path='/' exact>
-            <Content
-               sneakers={sneakers}
-               onClickAdd={onClickAdd}
-               onClickFavourite={onClickFavourite}
-               isLoading={contentIsLoading}
+            <Header
+               drawer={cartOpen}
+               cartCount={cartItems.length}
+               favouritesCount={favourites.length}
             />
-         </Route>
 
-         <Route path='/favourites'>
-            <Favourites
-               items={favourites}
-               onClickAdd={onClickAdd}
-               onClickFavourite={onClickFavourite}
-            ></Favourites>
-         </Route>
+            <Drawer
+               active={drawer}
+               cartItems={cartItems}
+               removeCartItem={removeCartItem}
+               closeDrawer={cartOpen}
+            />
 
-         <Route path='/user'>
-            <User></User>
-         </Route>
 
-      </div>
+            <Route path='/' exact>
+               <Content
+                  sneakers={sneakers}
+                  onClickAdd={onClickAdd}
+                  onClickFavourite={onClickFavourite}
+                  isLoading={contentIsLoading}
+               />
+            </Route>
+
+            <Route path='/favourites'>
+               <Favourites
+                  // items={favourites}
+                  onClickAdd={onClickAdd}
+                  onClickFavourite={onClickFavourite}
+               ></Favourites>
+            </Route>
+
+            <Route path='/user'>
+               <User></User>
+            </Route>
+
+         </div>
+      </AppContext.Provider>
+
    );
 }
 

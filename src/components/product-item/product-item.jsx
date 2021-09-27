@@ -21,7 +21,7 @@ const Card = ({ productData, onClickAdd, onClickFavourite, isLoading = false }) 
                <ContentLoader
                   speed={2}
                   width={134}
-                  height={210}
+                  height={212}
                   viewBox="0 0 154 195"
                   backgroundColor="#f3f3f3"
                   foregroundColor="#ecebeb"
