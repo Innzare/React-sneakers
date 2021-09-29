@@ -5,7 +5,7 @@ import Search from '../search';
 
 import './content.scss';
 
-const Content = ({ onClickAdd, sneakers, onClickFavourite, isLoading }) => {
+const Content = ({ onClickAdd, sneakers, onClickFavourite, isLoading, btnsDisable }) => {
    const [searchValue, setSearchValue] = React.useState('');
 
    const onSearchValue = (value) => {
@@ -23,6 +23,7 @@ const Content = ({ onClickAdd, sneakers, onClickFavourite, isLoading }) => {
                productData={item}
                key={isLoading ? index : item.id}
                isLoading={isLoading}
+               btnsDisable={btnsDisable}
             ></ProductItem>
          )
       });

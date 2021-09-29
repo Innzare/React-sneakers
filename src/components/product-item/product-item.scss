@@ -59,6 +59,10 @@
       &:hover {
          border-color: #d1d1d1;
       }
+      &:disabled {
+         cursor:progress;
+         opacity: 0.5;
+      }
    }
    .img {
       img {
@@ -99,6 +103,10 @@
          &.active {
             // background: linear-gradient(180deg, #89F09C 0%, #3CC755 100%);
             background: #79E88D;
+         }
+         &:disabled {
+            cursor:progress;
+            opacity: 0.5;
          }
       }
    }

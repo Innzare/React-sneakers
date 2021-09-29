@@ -13,7 +13,7 @@ import User from './../../pages/user';
 
 import './app.scss';
 
-// export const AppContext = React.createContext({});
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 const App = () => {
    const [drawer, setDrawer] = React.useState(false);
@@ -21,29 +21,61 @@ const App = () => {
    const [favourites, setFavourites] = React.useState([]);
    const [sneakers, setSneakers] = React.useState([]);
    const [contentIsLoading, setContentIsLoading] = React.useState(true);
+   const [btnsDisable, setBtnsDisable] = React.useState(false);
 
    React.useEffect(() => {
       async function fetchData() {
+         const sneakersResponse = await axios.get('https://6147484265467e0017384ad7.mockapi.io/products');
          const cartResponse = await axios.get('https://6147484265467e0017384ad7.mockapi.io/cart');
          const favouritesResponse = await axios.get('https://6147484265467e0017384ad7.mockapi.io/favourites');
-         const sneakersResponse = await axios.get('https://6147484265467e0017384ad7.mockapi.io/products');
 
          setContentIsLoading(false)
 
-         setCartItems(cartResponse.data);
-         setFavourites(favouritesResponse.data);
-         setSneakers(sneakersResponse.data);
+         setSneakers(sneakersResponse.data[0].items);
+         setCartItems(cartResponse.data[0].items);
+         setFavourites(favouritesResponse.data[0].items);
       };
-
       fetchData();
-      try {
-
-      } catch (err) {
-         alert('Произошла ошибка! Возможно слишком много запросов на MockAPI.');
-         console.log(err);
-      }
-
    }, []);
+
+   React.useEffect(() => {
+      async function fetchData() {
+         setBtnsDisable(true)
+         await delay(2000);
+         await axios.put(`https://6147484265467e0017384ad7.mockapi.io/cart/1`, {
+            items: cartItems
+         });
+         await delay(500);
+         setBtnsDisable(false)
+      }
+      fetchData();
+   }, [cartItems]);
+
+   React.useEffect(() => {
+      async function fetchData() {
+         setBtnsDisable(true)
+         await delay(2000);
+         await axios.put(`https://6147484265467e0017384ad7.mockapi.io/products/1`, {
+            items: sneakers
+         });
+         await delay(500);
+         setBtnsDisable(false)
+      }
+      fetchData();
+   }, [sneakers])
+
+   React.useEffect(() => {
+      async function fetchData() {
+         setBtnsDisable(true)
+         await delay(2000);
+         await axios.put(`https://6147484265467e0017384ad7.mockapi.io/favourites/1`, {
+            items: favourites
+         });
+         await delay(500);
+         setBtnsDisable(false)
+      }
+      fetchData();
+   }, [favourites])
 
    const cartOpen = () => {
       drawer ? document.body.classList.add('no-scroll') : document.body.classList.remove('no-scroll')
@@ -55,152 +87,94 @@ const App = () => {
 
    const onClickFavourite = async (productData) => {
       if (!productData.favourite) {
-         try {
-            const { data } = await axios.post('https://6147484265467e0017384ad7.mockapi.io/favourites', { ...productData, favourite: true, });
-            axios.put(`https://6147484265467e0017384ad7.mockapi.io/products/${productData.catalogId}`, {
-               ...productData, favourite: true, favouriteIdForDel: data.id
-            })
-            if (cartItems.length > 0 && cartItems.some(item => item.catalogId === productData.catalogId)) {
-               axios.put(`https://6147484265467e0017384ad7.mockapi.io/cart/${productData.cartIdForDel}`, { ...productData, favourite: true });
-               setCartItems(prev => {
-                  const newArr = prev.slice();
-                  return newArr.map(item => item.catalogId === productData.catalogId ? { ...item, favourite: true } : { ...item });
-               })
-            }
-            setSneakers(prev => {
-               const newArr = prev.slice();
-               return newArr.map(item => item.id === productData.id ? { ...item, favourite: true, favouriteIdForDel: data.id, } : { ...item });
-            })
-            setFavourites(prev => {
-               return [...prev, { ...data, favouriteIdForDel: data.id }];
-            })
-         } catch (err) {
-            alert('Произошла ошибка! Возможно слишком много запросов на MockAPI.');
-            console.log(err);
-         }
+         setFavourites(prev => {
+            const newApiState = [...prev, { ...productData, favourite: true }];
+            return newApiState;
+         })
+         setSneakers(prev => {
+            const newArr = prev.slice();
+            const newApiState = newArr.map(item => item.id === productData.id ? { ...item, favourite: true } : { ...item });
+            return newApiState;
+         })
 
       } else {
-         try {
-            await axios.delete(`https://6147484265467e0017384ad7.mockapi.io/favourites/${productData.favouriteIdForDel}`);
-            await axios.put(`https://6147484265467e0017384ad7.mockapi.io/products/${productData.catalogId}`, {
-               ...productData, favourite: false,
-            })
-            if (cartItems.length > 0 && cartItems.some(item => item.catalogId === productData.catalogId)) {
-               axios.put(`https://6147484265467e0017384ad7.mockapi.io/cart/${productData.cartIdForDel}`, { ...productData, favourite: false })
-               setCartItems(prev => {
-                  const newArr = prev.slice();
-                  return newArr.map(item => item.catalogId === productData.catalogId ? { ...item, favourite: false } : { ...item });
-               })
-            }
-            setSneakers(prev => {
-               const newArr = prev.slice();
-               return newArr.map(item => item.id === productData.catalogId ? { ...item, favourite: false } : { ...item });
-            })
-            setFavourites((prev) => {
-               return prev.filter(item => item.id !== productData.favouriteIdForDel)
-            })
-         } catch (err) {
-            alert('Произошла ошибка! Возможно слишком много запросов на MockAPI.');
-            console.log(err);
-         }
-
+         setSneakers(prev => {
+            const newArr = prev.slice();
+            const newApiState = newArr.map(item => item.id === productData.id ? { ...item, favourite: false } : { ...item });
+            return newApiState;
+         })
+         setFavourites((prev) => {
+            const newApiState = prev.filter(item => item.id !== productData.id);
+            return newApiState
+         })
       }
    }
 
    const onClickAdd = async (data) => {
-
       if (data.added) {
-         try {
-            axios.delete(`https://6147484265467e0017384ad7.mockapi.io/cart/${data.cartIdForDel}`)
-            axios.put(`https://6147484265467e0017384ad7.mockapi.io/products/${data.catalogId}`, {
-               ...data, added: false
-            })
-
-            setCartItems((prevCartItems) => {
-               return prevCartItems.filter(item => item.id !== data.cartIdForDel)
-            })
-            setSneakers(prev => {
+         if (favourites.length > 0 && favourites.some(item => item.id === data.id)) {
+            setFavourites(prev => {
                const newArr = prev.slice();
-               return newArr.map(item => item.catalogId === data.catalogId ? { ...item, added: false } : { ...item });
+               return newArr.map(item => item.id === data.id ? { ...item, added: false } : { ...item });
             })
-
-            if (favourites.length > 0 && favourites.some(item => item.catalogId === data.catalogId)) {
-               axios.put(`https://6147484265467e0017384ad7.mockapi.io/favourites/${data.favouriteIdForDel}`, {
-                  ...data, added: false,
-               })
-               setFavourites((prev) => {
-                  const newArr = prev.slice();
-                  return newArr.map(item => item.favouriteIdForDel === data.favouriteIdForDel ? { ...item, added: false, } : { ...item });
-               })
-            }
-
-         } catch (err) {
-            alert('Произошла ошибка! Возможно слишком много запросов на MockAPI.');
-            console.log(err);
          }
+
+         setSneakers(prev => {
+            const newArr = prev.slice();
+            const newApiState = newArr.map(item => item.id === data.id ? { ...item, added: false } : { ...item });
+            return newApiState
+         })
+
+         setCartItems((prevCartItems) => {
+            const newApiState = prevCartItems.filter(item => item.id !== data.id);
+            return newApiState;
+         })
 
       } else {
-         try {
-            const cartResp = await axios.post('https://6147484265467e0017384ad7.mockapi.io/cart', data);
-            axios.put(`https://6147484265467e0017384ad7.mockapi.io/products/${data.catalogId}`, {
-               ...data, added: true, cartIdForDel: cartResp.data.id, favouriteIdForDel: data.favouriteIdForDel
-            })
 
-            setCartItems(prev => [...prev, cartResp.data])
-            setSneakers(prev => {
+         if (favourites.length > 0 && favourites.some(item => item.id === data.id)) {
+            setFavourites(prev => {
                const newArr = prev.slice();
-               return newArr.map(item => item.catalogId === data.catalogId ? { ...item, added: true, cartIdForDel: cartResp.data.id } : { ...item });
+               return newArr.map(item => item.id === data.id ? { ...item, added: true } : { ...item });
             })
-
-            if (favourites.length > 0 && favourites.some(item => item.catalogId === data.catalogId)) {
-               axios.put(`https://6147484265467e0017384ad7.mockapi.io/favourites/${data.favouriteIdForDel}`, {
-                  ...data, added: true, cartIdForDel: cartResp.data.id
-               })
-               setFavourites((prev) => {
-                  const newArr = prev.slice();
-                  return newArr.map(item => item.catalogId === data.catalogId ? { ...item, added: true, cartIdForDel: cartResp.data.id } : { ...item });
-               })
-            }
-
-         } catch (err) {
-            alert('Произошла ошибка! Возможно слишком много запросов на MockAPI.');
-            console.log(err);
          }
+
+         setSneakers(prev => {
+            const newArr = prev.slice();
+            const newApiState = newArr.map(item => item.id === data.id ? { ...item, added: true } : { ...item });
+            return newApiState;
+         })
+
+         setCartItems(prev => {
+            const newArr = [...prev, data];
+            return newArr;
+         });
       }
 
    };
 
    const removeCartItem = (data) => {
-      console.log(data);
-      try {
-         axios.delete(`https://6147484265467e0017384ad7.mockapi.io/cart/${data.id}`);
-         axios.put(`https://6147484265467e0017384ad7.mockapi.io/products/${data.catalogId}`, { ...data, added: false })
-         setSneakers(prev => {
+      if (favourites.length > 0 && favourites.some(item => item.id === data.id)) {
+         setFavourites(prev => {
             const newArr = prev.slice();
-            return newArr.map(item => item.catalogId === data.catalogId ? { ...item, added: false } : { ...item });
+            return newArr.map(item => item.id === data.id ? { ...item, added: false } : { ...item });
          })
-
-         if (favourites.length > 0 && favourites.some(item => item.catalogId === data.catalogId)) {
-            axios.put(`https://6147484265467e0017384ad7.mockapi.io/favourites/${data.favouriteIdForDel}`, {
-               ...data, added: false
-            })
-            setFavourites((prev) => {
-               const newArr = prev.slice();
-               return newArr.map(item => item.catalogId === data.catalogId ? { ...item, added: false, } : { ...item });
-            })
-         }
-
-         setCartItems((prevCartItems) => {
-            return prevCartItems.filter(item => item.id !== data.id)
-         })
-      } catch (err) {
-         alert('Произошла ошибка! Возможно слишком много запросов на MockAPI.');
-         console.log(err);
       }
+
+      setSneakers(prev => {
+         const newArr = prev.slice();
+         const newApiState = newArr.map(item => item.id === data.id ? { ...item, added: false } : { ...item });
+         return newApiState;
+      })
+
+      setCartItems((prevCartItems) => {
+         const newApiState = prevCartItems.filter(item => item.id !== data.id);
+         return newApiState;
+      })
    }
 
    return (
-      <AppContext.Provider value={{ cartItems, favourites, sneakers }}>
+      <AppContext.Provider value={{ cartItems, favourites, sneakers, setCartItems, setSneakers, setFavourites }}>
          <div className="app clear">
 
             <Header
@@ -223,6 +197,7 @@ const App = () => {
                   onClickAdd={onClickAdd}
                   onClickFavourite={onClickFavourite}
                   isLoading={contentIsLoading}
+                  btnsDisable={btnsDisable}
                />
             </Route>
 
@@ -231,6 +206,7 @@ const App = () => {
                   // items={favourites}
                   onClickAdd={onClickAdd}
                   onClickFavourite={onClickFavourite}
+                  btnsDisable={btnsDisable}
                ></Favourites>
             </Route>
 
@@ -240,7 +216,6 @@ const App = () => {
 
          </div>
       </AppContext.Provider>
-
    );
 }
 

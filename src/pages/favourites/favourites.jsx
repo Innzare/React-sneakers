@@ -7,7 +7,7 @@ import AppContext from '../../context';
 
 import './favourites.scss';
 
-const Favourites = ({ items, onClickAdd, onClickFavourite }) => {
+const Favourites = ({ items, onClickAdd, onClickFavourite, btnsDisable }) => {
 
    const state = React.useContext(AppContext);
 
@@ -32,6 +32,7 @@ const Favourites = ({ items, onClickAdd, onClickFavourite }) => {
                         onClickAdd={onClickAdd}
                         onClickFavourite={onClickFavourite}
                         key={item.id}
+                        btnsDisable={btnsDisable}
                      />
                   )
                })
